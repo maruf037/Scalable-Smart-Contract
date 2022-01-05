@@ -44,13 +44,10 @@ contract stateChannel {
         uint256 playerSequence,
         address addressOfMessage) public {
         
-        require(playerTwo != address(0), '#1 The address
-        of the player is invalid');
-        require(playerMessage.length == 65, '#2 The length
-        of the message is invalid');
+        require(playerTwo != address(0), '#1 The address of the player is invalid');
+        require(playerMessage.length == 65, '#2 The length of the message is invalid');
         require(addressOfMessage == playerOne || 
-        addressOfMessage == playerTwo, "#3 You must use a
-        valid address of one of the players');
+        addressOfMessage == playerTwo, '#3 You must use a valid address of one of the players');
 
         uint256 escrowToUse = escrowOne;
 
@@ -64,12 +61,17 @@ contract stateChannel {
         playerCall, playerBet, playerBalance, playerSequence))));
         bytes32 r;
         bytes32 s;
-        uint v;
+        uint8 v;
 
         assembly {
             r := mload(add(playerMessage, 32))
             s := mload(add(playerMessage, 64))
             v := byte(0, mload(add(playerMessage, 96)))
         }
+
+        address originalSigner = ecrecover(message, v, r, s);
+        require(originalSigner == addressOfMessage, '#4 The signer must be the original address');
+
+
     }
 }
