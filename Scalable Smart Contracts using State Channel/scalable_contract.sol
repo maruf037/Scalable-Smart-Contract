@@ -59,6 +59,17 @@ contract stateChannel {
 
         //Recreate the signed message for the first player
         //to verify that the parameters are correct
-        bytes32 message = keccak256(abi.encodePacked)
+        bytes32 message = keccak256(abi.encodePacked("\x19Ethereum 
+        Signed Message:\n32", keccak256(abi.encodePacked(playerNonce,
+        playerCall, playerBet, playerBalance, playerSequence))));
+        bytes32 r;
+        bytes32 s;
+        uint v;
+
+        assembly {
+            r := mload(add(playerMessage, 32))
+            s := mload(add(playerMessage, 64))
+            v := byte(0, mload(add(playerMessage, 96)))
+        }
     }
 }
