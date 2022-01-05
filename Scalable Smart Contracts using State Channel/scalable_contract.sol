@@ -72,6 +72,29 @@ contract stateChannel {
         address originalSigner = ecrecover(message, v, r, s);
         require(originalSigner == addressOfMessage, '#4 The signer must be the original address');
 
+        if(addressOfMessage == playerOne) {
+            balanceOne = playerBalance;
+            isPlayer1BalanceSetUp = true;
+            betOne = playerBet;
+            callOne = playerCall;
+        } else {
+            balanceTwo = playerBalance;
+            isPlayer2BalanceSetUp = true;
+            betTwo = playerBet;
+            callTwo = playerCall;
+        }
 
+        if(isPlayer1BalanceSetUp && isPlayer2BalanceSetUp) {
+            if(callOne == callTwo) {
+                finalBalanceTwo = balanceTwo + betTwo;
+                finalBalanceOne = balanceOne - betTwo;
+            } else {
+                finalBalanceOne = balanceOne + betOne;
+                finalBalanceTwo = balanceTwo - betOne;
+            }
+
+            playerOne.transfer(finalBalanceOne);
+            playerTwo.transfer(finalBalanceTwo);
+        }
     }
 }
