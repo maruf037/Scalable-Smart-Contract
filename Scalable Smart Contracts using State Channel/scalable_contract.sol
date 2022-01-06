@@ -85,7 +85,7 @@ contract stateChannel {
         }
 
         if(isPlayer1BalanceSetUp && isPlayer2BalanceSetUp) {
-            if(callOne == callTwo) {
+            if(callOne == callTwo || block.timestamp > callTwo + 1 days) {
                 finalBalanceTwo = balanceTwo + betTwo;
                 finalBalanceOne = balanceOne - betTwo;
             } else {
